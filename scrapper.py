@@ -14,8 +14,11 @@ def getLineup(team, matchSoup):
         current_player['name'] = starter.select_one('span.team-lineups__list-player-name').text.strip()
         event_list = starter.select('span.team-lineups__list-events > span')
         #TODO: Other events...?
-        current_player['cards'] = [event.text.strip() for event in event_list if 'yellow_card' in event.select_one('img')['src']]
-        current_player['goals'] = [event.text.strip() for event in event_list if 'goal' in event.select_one('img')['src']]
+        current_player['yellows'] = [event.text.strip() for event in event_list if 'yellow_card' in event.select_one('img')['src']]
+        current_player['reds'] = [event.text.strip() for event in event_list if 'red_card' in event.select_one('img')['src']]
+        current_player['own_goals'] = [event.text.strip() for event in event_list if 'own_goal' in event.select_one('img')['src']]
+        current_player['goals'] = [event.text.strip() for event in event_list if 'goal' in event.select_one('img')['src'] and 'own_goal' not in event.select_one('img')['src']]
+        current_player['sub_off'] = [event.text.strip() for event in event_list if 'substitution_off' in event.select_one('img')['src']] 
         result.append(current_player)
     
     return result
@@ -32,7 +35,7 @@ def getSeason(seasonYear):
     script_tag.decompose()
     seasonSoup = bs4.BeautifulSoup(seasonSoup.renderContents(), 'html.parser')
 
-    for fixture in seasonSoup.select('div.fixres__item')[:1]: #TODO: Remove hardcoded cut
+    for fixture in seasonSoup.select('div.fixres__item')[:10]: #TODO: Remove hardcoded cut
         print("URL: %s" % fixture.find('a')['href'])
         print("Home Team: {} {}".format(fixture.select_one('span.matches__participant--side1 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[0].text.strip()))
         print("Away Team: {} {}".format(fixture.select_one('span.matches__participant--side2 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[1].text.strip()))

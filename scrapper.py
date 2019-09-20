@@ -1,4 +1,5 @@
 import bs4, requests, html
+from newspaper import Article
 
 def getSoup(matchUrl):
     res = requests.get(matchUrl)
@@ -35,7 +36,7 @@ def getSeason(seasonYear):
     script_tag.decompose()
     seasonSoup = bs4.BeautifulSoup(seasonSoup.renderContents(), 'html.parser')
 
-    for fixture in seasonSoup.select('div.fixres__item')[:10]: #TODO: Remove hardcoded cut
+    for fixture in seasonSoup.select('div.fixres__item')[:1]: #TODO: Remove hardcoded cut
         print("URL: %s" % fixture.find('a')['href'])
         print("Home Team: {} {}".format(fixture.select_one('span.matches__participant--side1 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[0].text.strip()))
         print("Away Team: {} {}".format(fixture.select_one('span.matches__participant--side2 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[1].text.strip()))
@@ -46,6 +47,14 @@ def getSeason(seasonYear):
 
         print("Home lineup: %s" % getLineup(0, matchSoup))
         print("Away lineup: %s" % getLineup(1, matchSoup))
+
+        reportUrl = '%s/report/%s' % (urlSplited[0], urlSplited[1])
+        article = Article(reportUrl)
+        article.download()
+        article.parse()
+        print("Match report: %s" % article.text)
+
+        
 
 getSeason('2009-10')
 

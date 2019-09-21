@@ -19,7 +19,7 @@ def getLineup(team, matchSoup):
 
     for starter in team_div.select('ul.team-lineups__list-group > li')[:11]: #Hardcoded cut to consider only players in starting 11 (for now)
         current_player = {}
-        current_player['name'] = starter.select_one('span.team-lineups__list-player-name').text.strip()
+        current_player['name'] = starter.select_one('span.team-lineups__list-player-name').text.replace('(c)', '').strip()
         event_list = starter.select('span.team-lineups__list-events > span')
         current_player['yellows'] = [event.text.strip() for event in event_list if 'yellow_card' in event.select_one('img')['src']]
         current_player['reds'] = [event.text.strip() for event in event_list if 'red_card' in event.select_one('img')['src']]
@@ -62,7 +62,7 @@ def getSeason(seasonYear):
 
         
 
-getSeason('2009-10')
+getSeason('2018-19')
 
 
 # https://www.skysports.com/premier-league-results/2018-19

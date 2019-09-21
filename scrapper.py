@@ -1,10 +1,17 @@
 import bs4, requests, html
+from bs4.dammit import EncodingDetector
 from newspaper import Article
 
 def getSoup(matchUrl):
     res = requests.get(matchUrl)
     res.raise_for_status()
-    return bs4.BeautifulSoup(res.text, 'lxml')
+
+    http_encoding = res.encoding if 'charset' in res.headers.get('content-type', '').lower() else None
+    html_encoding = EncodingDetector.find_declared_encoding(res.content, is_html=True)
+    encoding = html_encoding or http_encoding
+
+    return bs4.BeautifulSoup(res.content, 'lxml', from_encoding=encoding)
+    #return bs4.BeautifulSoup(res.text, 'lxml')
 
 def getLineup(team, matchSoup):
     result = []
@@ -14,7 +21,6 @@ def getLineup(team, matchSoup):
         current_player = {}
         current_player['name'] = starter.select_one('span.team-lineups__list-player-name').text.strip()
         event_list = starter.select('span.team-lineups__list-events > span')
-        #TODO: Other events...?
         current_player['yellows'] = [event.text.strip() for event in event_list if 'yellow_card' in event.select_one('img')['src']]
         current_player['reds'] = [event.text.strip() for event in event_list if 'red_card' in event.select_one('img')['src']]
         current_player['own_goals'] = [event.text.strip() for event in event_list if 'own_goal' in event.select_one('img')['src']]

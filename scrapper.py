@@ -70,11 +70,20 @@ def getSeason(seasonYear):
 
         #3 items on details: Matchup, match date and arena+attendance
         match_details = matchSoup.select('li.match-header__detail-item')
+
+        #Date extraction
         #extract matching capturing groups (full match, day of month, month in full name)
-        match_re_match = re.search('(?:\d{1,2}\:\d{2}\s(?:am|pm)\s)?(?:[a-zA-Z]+?\s)(\d{1,2})(?:st|nd|rd|th)\s(\w+)', match_details[1].text).groups()
+        match_date_groups = re.search('(?:\d{1,2}\:\d{2}\s(?:am|pm)\s)?(?:[a-zA-Z]+?\s)(\d{1,2})(?:st|nd|rd|th)\s(\w+)', match_details[1].text).groups()
         #create timestamp from matched information
-        match_date = dt.datetime.strptime('%s %s %d' % (*match_re_match, seasonYear if match_re_match[1] not in ['September, October, November, December'] else seasonYear-1), '%d %B %y')
+        match_date = dt.datetime.strptime('%s %s %d' % (*match_date_groups, seasonYear if match_date_groups[1] not in ['September, October, November, December'] else seasonYear-1), '%d %B %y')
         #print(match_date.strftime('%d/%m/%Y'))
+
+
+        #Stadium + attendance extraction
+        match_arena_groups = re.search('([\w\s]+?)\s+\(Att:\s(\d+)\)', match_details[2].text).groups() #Kind of an inefficient regex if I'm being honest...
+        match_stadium = match_arena_groups[0]
+        match_attendance = int(match_arena_groups[1])
+        print("Played at %s with %d spectators" % (match_stadium, match_attendance))
 
         home = getTeam(0, matchSoup)
         away = getTeam(1, matchSoup)

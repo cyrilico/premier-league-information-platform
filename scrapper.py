@@ -13,11 +13,15 @@ def getSoup(matchUrl):
     return bs4.BeautifulSoup(res.content, 'lxml', from_encoding=encoding)
     #return bs4.BeautifulSoup(res.text, 'lxml')
 
-def getLineup(team, matchSoup):
-    result = []
+def getTeam(team, matchSoup):
+    lineup = []
+    subs = []
+    CUTOFF = 11 #11 starters
     team_div = matchSoup.select('div.team-lineups__list-team')[team]
 
-    for starter in team_div.select('ul.team-lineups__list-group > li')[:11]: #Hardcoded cut to consider only players in starting 11 (for now)
+    #TODO: Not store red cards and subs as lists? They are a at most once type of event
+
+    for starter in team_div.select('ul.team-lineups__list-group > li')[:CUTOFF]:
         current_player = {}
         current_player['name'] = starter.select_one('span.team-lineups__list-player-name').text.replace('(c)', '').strip()
         event_list = starter.select('span.team-lineups__list-events > span')
@@ -26,9 +30,20 @@ def getLineup(team, matchSoup):
         current_player['own_goals'] = [event.text.strip() for event in event_list if 'own_goal' in event.select_one('img')['src']]
         current_player['goals'] = [event.text.strip() for event in event_list if 'goal' in event.select_one('img')['src'] or 'penalty' in event.select_one('img')['src'] and 'own_goal' not in event.select_one('img')['src']]
         current_player['sub_off'] = [event.text.strip() for event in event_list if 'substitution_off' in event.select_one('img')['src']] 
-        result.append(current_player)
+        lineup.append(current_player)
     
-    return result
+    for sub in team_div.select('ul.team-lineups__list-group > li')[CUTOFF:]:
+        current_player = {}
+        current_player['name'] = sub.select_one('span.team-lineups__list-player-name').text.replace('(c)', '').strip()
+        event_list = sub.select('span.team-lineups__list-events > span')
+        current_player['yellows'] = [event.text.strip() for event in event_list if 'yellow_card' in event.select_one('img')['src']]
+        current_player['reds'] = [event.text.strip() for event in event_list if 'red_card' in event.select_one('img')['src']]
+        current_player['own_goals'] = [event.text.strip() for event in event_list if 'own_goal' in event.select_one('img')['src']]
+        current_player['goals'] = [event.text.strip() for event in event_list if 'goal' in event.select_one('img')['src'] or 'penalty' in event.select_one('img')['src'] and 'own_goal' not in event.select_one('img')['src']]
+        current_player['sub_on'] = [event.text.strip() for event in event_list if 'substitution_on' in event.select_one('img')['src']]
+        subs.append(current_player)
+    
+    return (lineup, subs)
 
 def getSeason(seasonYear):
     seasonUrl = 'https://www.skysports.com/premier-league-results/%s' % seasonYear
@@ -51,8 +66,15 @@ def getSeason(seasonYear):
         lineupUrl = '%s/teams/%s' % (urlSplited[0], urlSplited[1])
         matchSoup = getSoup(lineupUrl)
 
-        print("Home lineup: %s" % getLineup(0, matchSoup))
-        print("Away lineup: %s" % getLineup(1, matchSoup))
+        home = getTeam(0, matchSoup)
+        away = getTeam(1, matchSoup)
+        print("Home lineup: %s" % home[0])
+        print()
+        print("Away lineup: %s" % away[0])
+        print()
+        print("Home subs: %s" % home[1])
+        print()
+        print("Away subs: %s" % away[1])
 
         reportUrl = '%s/report/%s' % (urlSplited[0], urlSplited[1])
         article = Article(reportUrl)

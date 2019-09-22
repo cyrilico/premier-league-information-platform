@@ -1,4 +1,6 @@
 import bs4, requests, html
+import re
+import datetime as dt
 from bs4.dammit import EncodingDetector
 from newspaper import Article
 
@@ -46,7 +48,7 @@ def getTeam(team, matchSoup):
     return (lineup, subs)
 
 def getSeason(seasonYear):
-    seasonUrl = 'https://www.skysports.com/premier-league-results/%s' % seasonYear
+    seasonUrl = 'https://www.skysports.com/premier-league-results/20%02d-%02d' % (seasonYear - 1, seasonYear)
     seasonSoup = getSoup(seasonUrl)
 
     # Make sure page renders all matches beforehand (no "Show more...")
@@ -66,6 +68,14 @@ def getSeason(seasonYear):
         lineupUrl = '%s/teams/%s' % (urlSplited[0], urlSplited[1])
         matchSoup = getSoup(lineupUrl)
 
+        #3 items on details: Matchup, match date and arena+attendance
+        match_details = matchSoup.select('li.match-header__detail-item')
+        #extract matching capturing groups (full match, day of month, month in full name)
+        match_re_match = re.search('(?:\d{1,2}\:\d{2}\s(?:am|pm)\s)?(?:[a-zA-Z]+?\s)(\d{1,2})(?:st|nd|rd|th)\s(\w+)', match_details[1].text).groups()
+        #create timestamp from matched information
+        match_date = dt.datetime.strptime('%s %s %d' % (*match_re_match, seasonYear if match_re_match[1] not in ['September, October, November, December'] else seasonYear-1), '%d %B %y')
+        #print(match_date.strftime('%d/%m/%Y'))
+
         home = getTeam(0, matchSoup)
         away = getTeam(1, matchSoup)
         print("Home lineup: %s" % home[0])
@@ -84,7 +94,7 @@ def getSeason(seasonYear):
 
         
 
-getSeason('2018-19')
+getSeason(19)
 
 
 # https://www.skysports.com/premier-league-results/2018-19

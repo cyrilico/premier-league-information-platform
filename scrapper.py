@@ -3,6 +3,8 @@ import re
 import datetime as dt
 from bs4.dammit import EncodingDetector
 from newspaper import Article
+from timeit import default_timer as timer
+import json
 
 def getSoup(matchUrl):
     res = requests.get(matchUrl)
@@ -13,7 +15,6 @@ def getSoup(matchUrl):
     encoding = html_encoding or http_encoding
 
     return bs4.BeautifulSoup(res.content, 'lxml', from_encoding=encoding)
-    #return bs4.BeautifulSoup(res.text, 'lxml')
 
 def getTeam(team, matchSoup):
     lineup = []
@@ -24,7 +25,7 @@ def getTeam(team, matchSoup):
     #TODO: Not store red cards and subs as lists? They are a at most once type of event
 
     for starter in team_div.select('ul.team-lineups__list-group > li')[:CUTOFF]:
-        current_player = {}
+        current_player = dict()
         current_player['name'] = starter.select_one('span.team-lineups__list-player-name').text.replace('(c)', '').strip()
         event_list = starter.select('span.team-lineups__list-events > span')
         current_player['yellows'] = [event.text.strip() for event in event_list if 'yellow_card' in event.select_one('img')['src']]
@@ -35,7 +36,7 @@ def getTeam(team, matchSoup):
         lineup.append(current_player)
     
     for sub in team_div.select('ul.team-lineups__list-group > li')[CUTOFF:]:
-        current_player = {}
+        current_player = dict()
         current_player['name'] = sub.select_one('span.team-lineups__list-player-name').text.replace('(c)', '').strip()
         event_list = sub.select('span.team-lineups__list-events > span')
         current_player['yellows'] = [event.text.strip() for event in event_list if 'yellow_card' in event.select_one('img')['src']]
@@ -59,71 +60,88 @@ def getSeason(seasonYear):
     script_tag.decompose()
     seasonSoup = bs4.BeautifulSoup(seasonSoup.renderContents(), 'html.parser')
 
-    for fixture in seasonSoup.select('div.fixres__item')[:3]: #TODO: Remove hardcoded cut
-        print("URL: %s" % fixture.find('a')['href'])
-        print("Home Team: {} {}".format(fixture.select_one('span.matches__participant--side1 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[0].text.strip()))
-        print("Away Team: {} {}".format(fixture.select_one('span.matches__participant--side2 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[1].text.strip()))
-        
+    games = []
+
+    # Process games
+    for fixture in seasonSoup.select('div.fixres__item'): #TODO: Remove hardcoded cut
+        game = dict()
+        #Get team names and scores
+        #print("URL: %s" % fixture.find('a')['href'])
+        #print("Home Team: {} {}".format(fixture.select_one('span.matches__participant--side1 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[0].text.strip()))
+        #print("Away Team: {} {}".format(fixture.select_one('span.matches__participant--side2 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[1].text.strip()))
+        home_team = fixture.select_one('span.matches__participant--side1 span.swap-text__target').text
+        home_score = int(fixture.select('span.matches__teamscores-side')[0].text.strip())
+        away_team = fixture.select_one('span.matches__participant--side2 span.swap-text__target').text
+        away_score = int(fixture.select('span.matches__teamscores-side')[1].text.strip())
+
+        #Deconstruct URL so as to easily construct lineups and report URL from it later
         urlSplited = fixture.find('a')['href'].rsplit('/', 1)
+
+        #Get match soup
         lineupUrl = '%s/teams/%s' % (urlSplited[0], urlSplited[1])
         matchSoup = getSoup(lineupUrl)
 
-        #3 items on details: Matchup, match date and arena+attendance
+        #Get match details (date, arena, attendance)
         match_details = matchSoup.select('li.match-header__detail-item')
 
-        #Date extraction
-        #extract matching capturing groups (full match, day of month, month in full name)
+        #Get date
+        #Extract matching capturing groups (full match, day of month, month in full name)
         match_date_groups = re.search('(?:\d{1,2}\:\d{2}\s(?:am|pm)\s)?(?:[a-zA-Z]+?\s)(\d{1,2})(?:st|nd|rd|th)\s(\w+)', match_details[1].text).groups()
         #create timestamp from matched information
-        match_date = dt.datetime.strptime('%s %s %d' % (*match_date_groups, seasonYear if match_date_groups[1] not in ['September, October, November, December'] else seasonYear-1), '%d %B %y')
-        #print(match_date.strftime('%d/%m/%Y'))
+        match_date = dt.datetime.strptime('%s %s %d' % (*match_date_groups, seasonYear if match_date_groups[1] not in ['September, October, November, December'] else seasonYear-1), '%d %B %y').strftime('%d/%m/%Y')
 
-
-        #Stadium + attendance extraction
+        #Get arena and attendance
         match_arena_groups = re.search('([\w\s]+\w+)\s+(?:\(Att:\s(\d+)\))?', match_details[2].text).groups()
-        match_stadium = match_arena_groups[0]
+        match_arena = match_arena_groups[0]
         match_attendance = int(match_arena_groups[1] if match_arena_groups[1] is not None else 54986) #TODO: Obviously remove this later...
-        print("Played at %s with %s spectators" % (match_stadium, match_attendance))
 
-        home = getTeam(0, matchSoup)
-        away = getTeam(1, matchSoup)
-        print("Home lineup: %s" % home[0])
-        print()
-        print("Away lineup: %s" % away[0])
-        print()
-        print("Home subs: %s" % home[1])
-        print()
-        print("Away subs: %s" % away[1])
-
-        reportUrl = '%s/report/%s' % (urlSplited[0], urlSplited[1])
-        article = Article(reportUrl)
-        article.download()
-        article.parse()
-        print("Match report: %s" % article.text)
-
+        game['date'] = match_date
+        game['arena'] = match_arena
+        game['attendance'] = match_attendance
         
 
-getSeason(12)
+        home_players = getTeam(0, matchSoup)
+        away_players = getTeam(1, matchSoup)
+        # print("Home lineup: %s" % home[0])
+        # print()
+        # print("Away lineup: %s" % away[0])
+        # print()
+        # print("Home subs: %s" % home[1])
+        # print()
+        # print("Away subs: %s" % away[1])
 
+        game['home_team'] = dict()
+        game['home_team']['name'] = home_team
+        game['home_team']['lineup'] = home_players[0]
+        game['home_team']['subs'] = home_players[1]
 
-# https://www.skysports.com/premier-league-results/2018-19
+        game['away_team'] = dict()
+        game['away_team']['name'] = away_team
+        game['away_team']['lineup'] = away_players[0]
+        game['away_team']['subs'] = away_players[1]
 
-# https://github.com/codelucas/newspaper
+        reportUrl = '%s/report/%s' % (urlSplited[0], urlSplited[1])
+        article = Article(reportUrl, language='en')
+        article.download()
+        article.parse()
+        match_report = article.text
 
-# from newspaper import Article
-# url = 'https://www.skysports.com/football/hull-city-vs-leicester/report/356341'
-# article = Article(url)
-# article.download()
-# article.parse()
-# article.text
+        game['report'] = re.sub(r'\n+', r' ', match_report) #Replace unwanted new lines with whitespaces
+        # print("Match report: %s" % article.text)
 
-# matchSoup = getSoup('https://www.skysports.com/football/tottenham-vs-brighton/teams/391084')
-# teamHome = getTeamLineup(1, matchSoup)
-# print('')
-# teamAway = getTeamLineup(2, matchSoup)
+        games.append(game)
+        #print("Game processed")
+    
+    return games
 
-# print('')
-# matchSoup = getSoup('https://www.skysports.com/football/arsenal-vs-fulham/teams/210836')
-# teamHome = getTeamLineup(1, matchSoup)
-# print('')
-# teamAway = getTeamLineup(2, matchSoup)
+        
+if __name__ == '__main__':
+    t = -timer()
+    games = getSeason(12)
+    t = t + timer()
+    print("Time: %s" % str(t))
+    
+    with open('11-12.txt', 'w') as f:
+        json.dump(games, f)
+    print("Done")
+    

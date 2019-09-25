@@ -59,7 +59,7 @@ def getSeason(seasonYear):
     script_tag.decompose()
     seasonSoup = bs4.BeautifulSoup(seasonSoup.renderContents(), 'html.parser')
 
-    for fixture in seasonSoup.select('div.fixres__item')[4:5]: #TODO: Remove hardcoded cut
+    for fixture in seasonSoup.select('div.fixres__item')[:3]: #TODO: Remove hardcoded cut
         print("URL: %s" % fixture.find('a')['href'])
         print("Home Team: {} {}".format(fixture.select_one('span.matches__participant--side1 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[0].text.strip()))
         print("Away Team: {} {}".format(fixture.select_one('span.matches__participant--side2 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[1].text.strip()))
@@ -80,10 +80,10 @@ def getSeason(seasonYear):
 
 
         #Stadium + attendance extraction
-        match_arena_groups = re.search('([\w\s]+?)\s+\(Att:\s(\d+)\)', match_details[2].text).groups() #Kind of an inefficient regex if I'm being honest...
+        match_arena_groups = re.search('([\w\s]+\w+)\s+(?:\(Att:\s(\d+)\))?', match_details[2].text).groups()
         match_stadium = match_arena_groups[0]
-        match_attendance = int(match_arena_groups[1])
-        print("Played at %s with %d spectators" % (match_stadium, match_attendance))
+        match_attendance = int(match_arena_groups[1] if match_arena_groups[1] is not None else 54986) #TODO: Obviously remove this later...
+        print("Played at %s with %s spectators" % (match_stadium, match_attendance))
 
         home = getTeam(0, matchSoup)
         away = getTeam(1, matchSoup)
@@ -103,7 +103,7 @@ def getSeason(seasonYear):
 
         
 
-getSeason(19)
+getSeason(12)
 
 
 # https://www.skysports.com/premier-league-results/2018-19

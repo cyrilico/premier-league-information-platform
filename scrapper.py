@@ -22,8 +22,6 @@ def getTeam(team, matchSoup):
     CUTOFF = 11 #11 starters
     team_div = matchSoup.select('div.team-lineups__list-team')[team]
 
-    #TODO: Not store red cards and subs as lists? They are a at most once type of event
-
     for starter in team_div.select('ul.team-lineups__list-group > li')[:CUTOFF]:
         current_player = dict()
         current_player['name'] = starter.select_one('span.team-lineups__list-player-name').text.replace('(c)', '').strip()
@@ -66,16 +64,16 @@ def getSeason(seasonYear):
     games = []
 
     # Process games
-    for fixture in seasonSoup.select('div.fixres__item')[90:100]: #TODO: Remove hardcoded cut
+    for fixture in seasonSoup.select('div.fixres__item')[10:11]: #TODO: Remove hardcoded cut
         game = dict()
         #Get team names and scores
         #print("URL: %s" % fixture.find('a')['href'])
         #print("Home Team: {} {}".format(fixture.select_one('span.matches__participant--side1 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[0].text.strip()))
         #print("Away Team: {} {}".format(fixture.select_one('span.matches__participant--side2 span.swap-text__target').text, fixture.select('span.matches__teamscores-side')[1].text.strip()))
         home_team = fixture.select_one('span.matches__participant--side1 span.swap-text__target').text
-        home_score = int(fixture.select('span.matches__teamscores-side')[0].text.strip())
+        #home_score = int(fixture.select('span.matches__teamscores-side')[0].text.strip())
         away_team = fixture.select_one('span.matches__participant--side2 span.swap-text__target').text
-        away_score = int(fixture.select('span.matches__teamscores-side')[1].text.strip())
+        #away_score = int(fixture.select('span.matches__teamscores-side')[1].text.strip())
 
         #Deconstruct URL so as to easily construct lineups and report URL from it later
         urlSplited = fixture.find('a')['href'].rsplit('/', 1)
@@ -105,14 +103,13 @@ def getSeason(seasonYear):
 
         home_players = getTeam(0, matchSoup)
         away_players = getTeam(1, matchSoup)
-        if home_team == 'Tottenham Hotspur':
-            print("Home lineup: %s" % home_players[0])
-            print()
-            print("Away lineup: %s" % away_players[0])
-            print()
-            print("Home subs: %s" % home_players[1])
-            print()
-            print("Away subs: %s" % away_players[1])
+        # print("Home lineup: %s" % home_players[0])
+        # print()
+        # print("Away lineup: %s" % away_players[0])
+        # print()
+        # print("Home subs: %s" % home_players[1])
+        # print()
+        # print("Away subs: %s" % away_players[1])
 
         game['home_team'] = dict()
         game['home_team']['name'] = home_team

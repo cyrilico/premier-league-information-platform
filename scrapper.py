@@ -70,7 +70,9 @@ def getSeason(seasonYear):
     if not exists:
         f.write('[')
     # Process games
-    for fixture in seasonSoup.select('div.fixres__item')[1:2]: #TODO: Remove hardcoded cut
+    start = 360
+    end = 380
+    for fixture in seasonSoup.select('div.fixres__item')[start:end]:
         game = dict()
         #Get team names and scores
         #print("URL: %s" % fixture.find('a')['href'])
@@ -138,10 +140,10 @@ def getSeason(seasonYear):
 
         #games.append(game)
         json.dump(game, f, ensure_ascii=False)
-        f.write(',') #Manually remove from last element written in a batch!
+        f.write(',')
         #print("Game processed")
     
-    #f.write(']') #Append manually in the end!
+    
     f.close()
     return games
 

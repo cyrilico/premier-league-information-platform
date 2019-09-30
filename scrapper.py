@@ -144,6 +144,6 @@ if __name__ == '__main__':
     print("Time: %s" % str(t))
     
     with open('{}-{}.json'.format(season-1, season), 'w') as f:
-        json.dump(games, f)
+        json.dump(games, f, ensure_ascii=False)
     print("Done")
     

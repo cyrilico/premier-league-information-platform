@@ -26,25 +26,25 @@ def getTeam(team, matchSoup):
         current_player = dict()
         current_player['name'] = starter.select_one('span.team-lineups__list-player-name').text.replace('(c)', '').strip()
         event_list = starter.select('span.team-lineups__list-events > span')
-        current_player['yellows'] = [event.text.strip() for event in event_list if 'yellow_card' in event.select_one('img')['src']]
-        current_player['reds'] = [event.text.strip() for event in event_list if 'red_card' in event.select_one('img')['src']]
-        current_player['own_goals'] = [event.text.strip() for event in event_list if 'own_goal' in event.select_one('img')['src']]
-        current_player['goals'] = [event.text.strip() for event in event_list if re.match('((?<!own_)goal)|penalty(?!missed)', event.select_one('img')['src']) is not None]
-        current_player['missed_pens'] = [event.text.strip() for event in event_list if 'penalty_missed' in event.select_one('img')['src']]
-        current_player['sub_off'] = [event.text.strip() for event in event_list if 'substitution_off' in event.select_one('img')['src']] 
+        current_player['yellows'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'yellow_card' in event.select_one('img')['src']]
+        current_player['reds'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'red_card' in event.select_one('img')['src']]
+        current_player['own_goals'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'own_goal' in event.select_one('img')['src']]
+        current_player['goals'] = [int(event.text.strip().replace('\'','')) for event in event_list if re.match('((?<!own_)goal)|penalty(?!missed)', event.select_one('img')['src']) is not None]
+        current_player['missed_pens'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'penalty_missed' in event.select_one('img')['src']]
+        current_player['sub_off'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'substitution_off' in event.select_one('img')['src']] 
         lineup.append(current_player)
     
     for sub in team_div.select('ul.team-lineups__list-group > li')[CUTOFF:]:
         current_player = dict()
         current_player['name'] = sub.select_one('span.team-lineups__list-player-name').text.replace('(c)', '').strip()
         event_list = sub.select('span.team-lineups__list-events > span')
-        current_player['yellows'] = [event.text.strip() for event in event_list if 'yellow_card' in event.select_one('img')['src']]
-        current_player['reds'] = [event.text.strip() for event in event_list if 'red_card' in event.select_one('img')['src']]
-        current_player['own_goals'] = [event.text.strip() for event in event_list if 'own_goal' in event.select_one('img')['src']]
-        current_player['goals'] = [event.text.strip() for event in event_list if re.match('((?<!own_)goal)|penalty(?!missed)', event.select_one('img')['src']) is not None]
-        current_player['missed_pens'] = [event.text.strip() for event in event_list if 'penalty_missed' in event.select_one('img')['src']]
-        current_player['sub_on'] = [event.text.strip() for event in event_list if 'substitution_on' in event.select_one('img')['src']]
-        current_player['suboff'] = [event.text.strip() for event in event_list if 'substitution_off' in event.select_one('img')['src']]
+        current_player['yellows'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'yellow_card' in event.select_one('img')['src']]
+        current_player['reds'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'red_card' in event.select_one('img')['src']]
+        current_player['own_goals'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'own_goal' in event.select_one('img')['src']]
+        current_player['goals'] = [int(event.text.strip().replace('\'','')) for event in event_list if re.match('((?<!own_)goal)|penalty(?!missed)', event.select_one('img')['src']) is not None]
+        current_player['missed_pens'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'penalty_missed' in event.select_one('img')['src']]
+        current_player['sub_on'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'substitution_on' in event.select_one('img')['src']]
+        current_player['suboff'] = [int(event.text.strip().replace('\'','')) for event in event_list if 'substitution_off' in event.select_one('img')['src']]
         subs.append(current_player)
     
     return (lineup, subs)
@@ -64,7 +64,7 @@ def getSeason(seasonYear):
     games = []
 
     # Process games
-    for fixture in seasonSoup.select('div.fixres__item')[10:11]: #TODO: Remove hardcoded cut
+    for fixture in seasonSoup.select('div.fixres__item')[:1]: #TODO: Remove hardcoded cut
         game = dict()
         #Get team names and scores
         #print("URL: %s" % fixture.find('a')['href'])
@@ -138,11 +138,12 @@ def getSeason(seasonYear):
         
 if __name__ == '__main__':
     t = -timer()
-    games = getSeason(19)
+    season = 19
+    games = getSeason(season)
     t = t + timer()
     print("Time: %s" % str(t))
     
-    with open('f.txt', 'w') as f:
+    with open('{}-{}.json'.format(season-1, season), 'w') as f:
         json.dump(games, f)
     print("Done")
     

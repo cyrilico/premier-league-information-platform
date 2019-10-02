@@ -1,10 +1,7 @@
 import os
 
-<<<<<<< Updated upstream
-filename = '16-17.json'
-=======
-filename = '15-16.json'
->>>>>>> Stashed changes
+filename = 'test.json'
+
 with open(filename, 'rb+') as f:
     f.seek(-1, os.SEEK_END)
     f.truncate()

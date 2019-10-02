@@ -30,7 +30,7 @@ def getTeam(team, matchSoup):
         current_player['yellows'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'yellow_card' in event.select_one('img')['src']]
         current_player['reds'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'red_card' in event.select_one('img')['src']]
         current_player['own_goals'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'own_goal' in event.select_one('img')['src']]
-        current_player['goals'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if re.match('((?<!own_)goal)|penalty(?!missed)', event.select_one('img')['src']) is not None]
+        current_player['goals'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if re.search('((?<!own_)goal)|penalty(?!missed)', event.select_one('img')['src']) is not None]
         current_player['missed_pens'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'penalty_missed' in event.select_one('img')['src']]
         current_player['sub_off'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'substitution_off' in event.select_one('img')['src']] 
         lineup.append(current_player)
@@ -42,7 +42,7 @@ def getTeam(team, matchSoup):
         current_player['yellows'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'yellow_card' in event.select_one('img')['src']]
         current_player['reds'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'red_card' in event.select_one('img')['src']]
         current_player['own_goals'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'own_goal' in event.select_one('img')['src']]
-        current_player['goals'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if re.match('((?<!own_)goal)|penalty(?!missed)', event.select_one('img')['src']) is not None]
+        current_player['goals'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if re.search('((?<!own_)goal)|penalty(?!missed)', event.select_one('img')['src']) is not None]
         current_player['missed_pens'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'penalty_missed' in event.select_one('img')['src']]
         current_player['sub_on'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'substitution_on' in event.select_one('img')['src']]
         current_player['sub_off'] = [int(re.sub(r'(\+\d+)?\'','',event.text.strip())) for event in event_list if 'substitution_off' in event.select_one('img')['src']]
@@ -70,8 +70,8 @@ def getSeason(seasonYear):
     if not exists:
         f.write('[')
     # Process games
-    start = 0
-    end = 1
+    start = 360
+    end = 380
     for fixture in seasonSoup.select('div.fixres__item')[start:end]:
         game = dict()
         #Get team names and scores
@@ -150,7 +150,7 @@ def getSeason(seasonYear):
         
 if __name__ == '__main__':
     t = -timer()
-    season = 15
+    season = 17
     games = getSeason(season)
     t = t + timer()
     print("Time: %s" % str(t))

@@ -70,7 +70,7 @@ def getSeason(seasonYear):
     if not exists:
         f.write('[')
     # Process games
-    start = 360
+    start = 300
     end = 380
     for fixture in seasonSoup.select('div.fixres__item')[start:end]:
         game = dict()
@@ -150,7 +150,7 @@ def getSeason(seasonYear):
         
 if __name__ == '__main__':
     t = -timer()
-    season = 17
+    season = 16
     games = getSeason(season)
     t = t + timer()
     print("Time: %s" % str(t))

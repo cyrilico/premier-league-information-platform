@@ -6,6 +6,8 @@ import seaborn as sns
 
 from functools import reduce
 
+sns.set_palette("dark")
+
 games = []
 for key in ['14-15','15-16','16-17','17-18','18-19']:
     games.extend(json.load(open('{}.json'.format(key))))
@@ -53,8 +55,14 @@ sub_df = pd.DataFrame([{'minute': k, 'sub_count': v} for k,v in subs.items()])
 goal_df = pd.DataFrame([{'minute': k, 'goal_count': v} for k,v in goals.items()])
 
 final_df = card_df.merge(sub_df, how='outer', on='minute').merge(goal_df, how='outer', on='minute')
-plt.plot( 'minute', 'card_count', data=cards, marker='', color='skyblue', linewidth=2)
-#plt.plot( 'minute', 'sub_count', data=sub_df, marker='', color='olive', linewidth=2)
-#plt.plot( 'minute', 'goal_count', data=goal_df, marker='', color='olive', linewidth=2, linestyle='dashed')
-plt.legend()
+
+final_df = final_df.set_index('minute')
+final_df = final_df.sort_index()
+final_df = final_df.transpose()
+final_df.T.plot()
+
+# plt.plot( 'minute', 'card_count', data=cards, marker='', color='skyblue', linewidth=2)
+# #plt.plot( 'minute', 'sub_count', data=sub_df, marker='', color='olive', linewidth=2)
+# #plt.plot( 'minute', 'goal_count', data=goal_df, marker='', color='olive', linewidth=2, linestyle='dashed')
+# plt.legend()
 plt.show()

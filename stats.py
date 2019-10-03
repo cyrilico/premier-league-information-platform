@@ -62,7 +62,7 @@ final_df = final_df.transpose()
 final_df.T.plot()
 
 
-goalsBySeason = pd.DataFrame([{'minute': k, 'card_count': v} for k,v in cards.items()])
+#goalsBySeason = pd.DataFrame([{'minute': k, 'card_count': v} for k,v in cards.items()]) #wtf  :)
 
 
 # plt.plot( 'minute', 'card_count', data=cards, marker='', color='skyblue', linewidth=2)
@@ -71,9 +71,8 @@ goalsBySeason = pd.DataFrame([{'minute': k, 'card_count': v} for k,v in cards.it
 # plt.legend()
 plt.show()
 
-data = pd.read_csv("gamesprocessed.csv") 
-# Preview the first 5 lines of the loaded data 
-print(data.head())
-size = 380
-list_of_dfs = [data.loc[i:i+size-1,:] for i in range(0, len(data),size)]
-print(list_of_dfs[0])
+data = pd.read_csv("gamesprocessed.csv")
+goals_by_season = [{'season': key, 'nr_goals': data[idx*380:(idx+1)*380]['HomeFTScore'].sum()+data[idx*380:(idx+1)*380]['AwayFTScore'].sum()} \
+                    for idx, key in enumerate(['14-15', '15-16', '16-17', '17-18', '18-19'])]
+
+print(goals_by_season)

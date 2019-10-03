@@ -69,10 +69,17 @@ final_df.T.plot()
 # #plt.plot( 'minute', 'sub_count', data=sub_df, marker='', color='olive', linewidth=2)
 # #plt.plot( 'minute', 'goal_count', data=goal_df, marker='', color='olive', linewidth=2, linestyle='dashed')
 # plt.legend()
-plt.show()
+#plt.show()
 
 data = pd.read_csv("gamesprocessed.csv")
 goals_by_season = [{'season': key, 'nr_goals': data[idx*380:(idx+1)*380]['HomeFTScore'].sum()+data[idx*380:(idx+1)*380]['AwayFTScore'].sum()} \
                     for idx, key in enumerate(['14-15', '15-16', '16-17', '17-18', '18-19'])]
 
-print(goals_by_season)
+goals_by_month_season = dict()
+for idx, key in enumerate(['14-15', '15-16', '16-17', '17-18', '18-19']):
+    season_df = data[idx*380:(idx+1)*380]
+    season_df[["day", "mm", "year"]] = season_df["Date"].str.split("/", expand=True)
+    season_df_grouped = season_df.groupby(['mm','year'])
+    goals_by_month_season[key] = season_df_grouped['HomeFTScore'].sum()+season_df_grouped['AwayFTScore'].sum()
+
+print(goals_by_month_season)

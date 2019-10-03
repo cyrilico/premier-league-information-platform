@@ -97,7 +97,7 @@ def getSeason(seasonYear):
         #Extract matching capturing groups (full match, day of month, month in full name)
         match_date_groups = re.search('(?:\d{1,2}\:\d{2}\s(?:am|pm)\s)?(?:[a-zA-Z]+?\s)(\d{1,2})(?:st|nd|rd|th)\s(\w+)', match_details[1].text).groups()
         #create timestamp from matched information
-        match_date = dt.datetime.strptime('%s %s %d' % (*match_date_groups, seasonYear if match_date_groups[1] not in ['September, October, November, December'] else seasonYear-1), '%d %B %y').strftime('%d/%m/%Y')
+        match_date = dt.datetime.strptime('%s %s %d' % (*match_date_groups, seasonYear if match_date_groups[1] not in ['September', 'October', 'November', 'December'] else seasonYear-1), '%d %B %y').strftime('%d/%m/%Y')
 
         #Get arena and attendance
         match_arena_groups = re.search('([\w\s,\'\-]+\w+)\s+(?:\(Att:\s(\d+)\))?', match_details[2].text).groups()

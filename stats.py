@@ -61,8 +61,19 @@ final_df = final_df.sort_index()
 final_df = final_df.transpose()
 final_df.T.plot()
 
+
+goalsBySeason = pd.DataFrame([{'minute': k, 'card_count': v} for k,v in cards.items()])
+
+
 # plt.plot( 'minute', 'card_count', data=cards, marker='', color='skyblue', linewidth=2)
 # #plt.plot( 'minute', 'sub_count', data=sub_df, marker='', color='olive', linewidth=2)
 # #plt.plot( 'minute', 'goal_count', data=goal_df, marker='', color='olive', linewidth=2, linestyle='dashed')
 # plt.legend()
 plt.show()
+
+data = pd.read_csv("gamesprocessed.csv") 
+# Preview the first 5 lines of the loaded data 
+print(data.head())
+size = 380
+list_of_dfs = [data.loc[i:i+size-1,:] for i in range(0, len(data),size)]
+print(list_of_dfs[0])

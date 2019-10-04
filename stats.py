@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
+import calendar
 
 from functools import reduce
 
@@ -56,20 +57,14 @@ goal_df = pd.DataFrame([{'minute': k, 'goal_count': v} for k,v in goals.items()]
 
 final_df = card_df.merge(sub_df, how='outer', on='minute').merge(goal_df, how='outer', on='minute')
 
+# Graph 1
 final_df = final_df.set_index('minute')
 final_df = final_df.sort_index()
 final_df = final_df.transpose()
 final_df.T.plot()
-
-
-#goalsBySeason = pd.DataFrame([{'minute': k, 'card_count': v} for k,v in cards.items()]) #wtf  :)
-
-
-# plt.plot( 'minute', 'card_count', data=cards, marker='', color='skyblue', linewidth=2)
-# #plt.plot( 'minute', 'sub_count', data=sub_df, marker='', color='olive', linewidth=2)
-# #plt.plot( 'minute', 'goal_count', data=goal_df, marker='', color='olive', linewidth=2, linestyle='dashed')
-# plt.legend()
-#plt.show()
+plt.xlabel('Minutes')
+plt.ylabel('Events')
+plt.title('Events by Minute')
 
 data = pd.read_csv("gamesprocessed.csv")
 goals_by_season = [{'season': key, 'nr_goals': data[idx*380:(idx+1)*380]['HomeFTScore'].sum()+data[idx*380:(idx+1)*380]['AwayFTScore'].sum()} \
@@ -79,7 +74,33 @@ goals_by_month_season = dict()
 for idx, key in enumerate(['14-15', '15-16', '16-17', '17-18', '18-19']):
     season_df = data[idx*380:(idx+1)*380]
     season_df[["day", "mm", "year"]] = season_df["Date"].str.split("/", expand=True)
-    season_df_grouped = season_df.groupby(['mm','year'])
+    season_df_grouped = season_df.groupby(['mm'])
     goals_by_month_season[key] = season_df_grouped['HomeFTScore'].sum()+season_df_grouped['AwayFTScore'].sum()
 
-print(goals_by_month_season)
+# Graph 2
+goalsBySeason = pd.DataFrame(goals_by_season)
+goalsBySeason = goalsBySeason.set_index('season')
+goalsBySeason.plot.bar(legend=None)
+for i, v in enumerate(goalsBySeason.get('nr_goals')):
+    plt.text(i - 0.15, v + 5, str(v))
+plt.xlabel('Season')
+plt.ylabel('Goals')
+plt.title('Goals by Season')
+
+
+# Graph 3
+goalsByMonthSeason = pd.DataFrame(goals_by_month_season)
+goalsByMonthSeason = goalsByMonthSeason.transpose()
+goalsByMonthSeason = goalsByMonthSeason[['08','09','10','11','12','01','02','03','04','05']]
+goalsByMonthSeason = goalsByMonthSeason.rename(columns=lambda x: calendar.month_abbr[int(x)])
+
+ax = goalsByMonthSeason.plot.bar(stacked=True, legend='reverse')
+handles, labels = ax.get_legend_handles_labels()
+plt.legend(handles=reversed(handles), labels=reversed(labels), title="Months", loc='center left', bbox_to_anchor=(1.0, 0.5))
+plt.title("Goals By Month/Season")
+plt.ylabel("Goals")
+plt.xlabel("Season")
+
+
+# Show Graphs
+plt.show()

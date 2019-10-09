@@ -57,6 +57,16 @@ goal_df = pd.DataFrame([{'minute': k, 'goal_count': v} for k,v in goals.items()]
 
 final_df = card_df.merge(sub_df, how='outer', on='minute').merge(goal_df, how='outer', on='minute')
 
+report_length_per_season = {'14-15': [], '15-16': [], '16-17': [], '17-18': [], '18-19': []}
+for key in ['14-15', '15-16', '16-17', '17-18', '18-19']:
+    for season_game in json.load(open('{}.json'.format(key))):
+        report_length_per_season[key].append(len(season_game['report']))
+
+report_length_df = pd.DataFrame([{'season': k, 'report_lengths': v} for k,v in report_length_per_season.items()])
+
+#print(report_length_df)
+
+
 # Graph 1
 final_df = final_df.set_index('minute')
 final_df = final_df.sort_index()
@@ -106,4 +116,4 @@ plt.xlabel("Season")
 
 
 # Show Graphs
-plt.show()
+#plt.show()

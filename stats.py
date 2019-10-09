@@ -4,6 +4,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import calendar
+import csv
 
 from functools import reduce
 
@@ -66,7 +67,6 @@ report_length_df = pd.DataFrame([{'season': k, 'report_lengths': v} for k,v in r
 
 #print(report_length_df)
 
-
 # Graph 1
 final_df = final_df.set_index('minute')
 final_df = final_df.sort_index()
@@ -79,6 +79,18 @@ plt.title('Events by Minute')
 data = pd.read_csv("gamesprocessed.csv")
 goals_by_season = [{'season': key, 'nr_goals': data[idx*380:(idx+1)*380]['HomeFTScore'].sum()+data[idx*380:(idx+1)*380]['AwayFTScore'].sum()} \
                     for idx, key in enumerate(['14-15', '15-16', '16-17', '17-18', '18-19'])]
+
+csv_as_json = csv.DictReader(open('gamesprocessed.csv'), ['Date','HomeTeam','AwayTeam','HomeFTScore','AwayFTScore','HomeHTScore','AwayHTScore','Referee'])
+winning_team_goals = dict()
+for game in csv_as_json:
+    if game['HomeFTScore'] > game['AwayFTScore']:
+        winning_team_goals[game['HomeFTScore']] = winning_team_goals.get(game['HomeFTScore'], 0) + 1
+    elif game['AwayFTScore'] > game['HomeFTScore']:
+        winning_team_goals[game['AwayFTScore']] = winning_team_goals.get(game['AwayFTScore'], 0) + 1
+
+winning_team_goals_df = pd.DataFrame([{'nr_goals': k, 'count': v} for k,v in winning_team_goals.items() if k != 'HomeFTScore']) #WTF filter... but it was present idk why
+
+#print(winning_team_goals_df)
 
 goals_by_month_season = dict()
 for idx, key in enumerate(['14-15', '15-16', '16-17', '17-18', '18-19']):

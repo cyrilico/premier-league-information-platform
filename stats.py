@@ -135,24 +135,30 @@ goalsByMonthSeason = goalsByMonthSeason.rename(columns=lambda x: calendar.month_
 # plt.xlabel("Month")
 
 #Graph 5
-# print(winning_team_goals_df)
+print(winning_team_goals_df)
+winning_team_goals_df = winning_team_goals_df.set_index('nr_goals')
+winning_team_goals_df = winning_team_goals_df.sort_index()
+winning_team_goals_df.plot.bar(legend=False)
+plt.title("????????")
+plt.ylabel("Games")
+plt.xlabel("Goals")
 
 #Graph 6 
-print(report_length_df.explode('report_lengths'))
 report_df = report_length_df.explode('report_lengths')
+# ax = sns.boxplot(x="season", y="report_lengths", data=report_df)
 
-ax = sns.boxplot(x="season", y="report_lengths", data=report_df)
-# iterate over boxes
-for i,box in enumerate(ax.artists):
-    box.set_edgecolor('black')
-    box.set_facecolor('white')
+# # iterate over boxes
+# for i,box in enumerate(ax.artists):
+#     box.set_edgecolor('black')
+#     box.set_facecolor('white')
 
-    # iterate over whiskers and median lines
-    for j in range(6*i,6*(i+1)):
-         ax.lines[j].set_color('black')
+#     # iterate over whiskers and median lines
+#     for j in range(6*i,6*(i+1)):
+#          ax.lines[j].set_color('black')
 
-plt.title("Reports Length By Season")
-plt.ylabel("Reports Length (No. Characters)")
-plt.xlabel("Season")
+# plt.title("Reports Length By Season")
+# plt.ylabel("Reports Length (No. Characters)")
+# plt.xlabel("Season")
+
 # Show Graphs
 plt.show()

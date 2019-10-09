@@ -8,7 +8,7 @@ import csv
 
 from functools import reduce
 
-sns.set_palette("dark")
+# sns.set_palette("dark")
 
 games = []
 for key in ['14-15','15-16','16-17','17-18','18-19']:
@@ -64,6 +64,7 @@ for key in ['14-15', '15-16', '16-17', '17-18', '18-19']:
         report_length_per_season[key].append(len(season_game['report']))
 
 report_length_df = pd.DataFrame([{'season': k, 'report_lengths': v} for k,v in report_length_per_season.items()])
+
 
 #print(report_length_df)
 
@@ -127,13 +128,31 @@ goalsByMonthSeason = goalsByMonthSeason.rename(columns=lambda x: calendar.month_
 # plt.xlabel("Season")
 
 # Graph 4
-goalsByMonthSeason.T.plot()
-plt.legend(title="Seasons")
-plt.title("Goals By Month/Season")
-plt.ylabel("Goals")
-plt.xlabel("Month")
+# goalsByMonthSeason.T.plot()
+# plt.legend(title="Seasons")
+# plt.title("Goals By Month/Season")
+# plt.ylabel("Goals")
+# plt.xlabel("Month")
 
 #Graph 5
+# print(winning_team_goals_df)
 
+#Graph 6 
+print(report_length_df.explode('report_lengths'))
+report_df = report_length_df.explode('report_lengths')
+
+ax = sns.boxplot(x="season", y="report_lengths", data=report_df)
+# iterate over boxes
+for i,box in enumerate(ax.artists):
+    box.set_edgecolor('black')
+    box.set_facecolor('white')
+
+    # iterate over whiskers and median lines
+    for j in range(6*i,6*(i+1)):
+         ax.lines[j].set_color('black')
+
+plt.title("Reports Length By Season")
+plt.ylabel("Reports Length (No. Characters)")
+plt.xlabel("Season")
 # Show Graphs
 plt.show()

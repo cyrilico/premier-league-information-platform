@@ -75,7 +75,10 @@ for idx, key in enumerate(['14-15', '15-16', '16-17', '17-18', '18-19']):
     season_df = data[idx*380:(idx+1)*380]
     season_df[["day", "mm", "year"]] = season_df["Date"].str.split("/", expand=True)
     season_df_grouped = season_df.groupby(['mm'])
+    #Uncomment if graphing purely goal count
     goals_by_month_season[key] = season_df_grouped['HomeFTScore'].sum()+season_df_grouped['AwayFTScore'].sum()
+    #Uncomment if graphing goal count per number of games
+    goals_by_month_season[key] = (season_df_grouped['HomeFTScore'].sum()+season_df_grouped['AwayFTScore'].sum())/season_df_grouped['HomeFTScore'].count()
 
 # Graph 2
 goalsBySeason = pd.DataFrame(goals_by_season)

@@ -1,5 +1,6 @@
 import json
 from re import sub
+from copy import deepcopy
 
 
 games = []
@@ -7,11 +8,9 @@ for key in ['14-15','15-16','16-17','17-18','18-19']:
     games.extend(json.load(open('{}-fixed.json'.format(key))))
 
 def solr(game):
-    result = {}
-    result['date'] = game['date']
-    result['arena'] = game['arena']
-    result['home_team'] = game['home_team']['name']
-    result['away_team'] = game['away_team']['name']
+    result = deepcopy(game)
+    result['home'] = game['home_team']['name']
+    result['away'] = game['away_team']['name']
     result['home_lineup'] = list(map(lambda p: p['name'], game['home_team']['lineup']))
     result['away_lineup'] = list(map(lambda p: p['name'], game['away_team']['lineup']))
     result['home_subs'] = list(map(lambda p: p['name'], game['home_team']['subs']))

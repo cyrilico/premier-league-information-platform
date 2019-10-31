@@ -18,7 +18,7 @@ def merge_game(game):
 
 games = []
 for key in ['14-15','15-16','16-17','17-18','18-19']:
-    games.extend(json.load(open('{}-fixed.json'.format(key))))
+    games.extend(json.load(open('scrapped_files/{}-fixed.json'.format(key))))
 
 def solr(game):
     result = {}
@@ -30,9 +30,11 @@ def solr(game):
 
 
     # Not kept
-    result['date'] = game['date']
+    #d,m,y = game['date'].split('/')
+    #result['date'] = '{}-{}-{}'.format(y,m,d)
     result['home'] = game['home_team']['name']
     result['away'] = game['away_team']['name']
+    result['arena'] = game['arena']
     result['home_lineup'] = list(map(lambda p: p['name'], game['home_team']['lineup']))
     result['away_lineup'] = list(map(lambda p: p['name'], game['away_team']['lineup']))
     result['home_subs'] = list(map(lambda p: p['name'], game['home_team']['subs']))

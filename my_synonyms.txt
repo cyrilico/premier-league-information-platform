@@ -1,0 +1,9 @@
+# Club synonyms
+Arsenal,gunners
+Tottenham Hotspur,tottenham,hotspurs,spurs,yids
+Manchester United,man united,man u,red devils
+
+# Arena synonyms
+White Hart Lane,the lane
+Old Trafford,theatre of dreams
+Anfield,kop

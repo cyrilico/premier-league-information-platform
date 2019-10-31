@@ -22,6 +22,8 @@ Given local binaries and terminal session inside main folder (e.g., `solr-8.2.0`
 8) Custom ranking - *To be added/Haven't checked how to do yet*
 9) Range filters - *To be added/Haven't checked how to do yet*
 
+### Stuff
+- If no fields specified in query, the search will default to the report field (there is no native support for all fields, must create a [copy field](https://lucene.apache.org/solr/guide/8_2/copying-fields.html) that captures all document text into one field, which envolves double the memory usage and double the indexing effort (pointless here)
 
 ### Questions
 Check Google Keep note.

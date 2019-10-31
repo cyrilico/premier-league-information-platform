@@ -16,7 +16,7 @@ Given local binaries and terminal session inside main folder (e.g., `solr-8.2.0`
 2) Synonym search (e.g., repeat last query but instead of arsenal, use synonym `gunners`; search `arena:anfield` and then `arena:kop` for example in other field)
 3) Wildcard search (e.g., search for `home:man*`, should return 190 results, 95 home games by Manchester United + 95 home games by Manchester City)
 4) Boosts (some fields more relevant than others) - *To be added*
-5) Boolean queries - *To be added*
+5) Boolean queries (e.g., search for all matches between Arsenal and Chelsea (10 results, 2 games per season): `(home:arsenal AND away:chelsea) OR (home:chelsea AND away:arsenal)`)
 6) Faceting (group by) - *To be added*
 7) Fuzziness (typos/edit distance) - *To be added*
 8) Custom ranking - *To be added/Haven't checked how to do yet*

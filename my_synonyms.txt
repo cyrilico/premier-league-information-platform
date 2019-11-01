@@ -1,7 +1,7 @@
 # Club synonyms
-Arsenal,gunners
-Tottenham Hotspur,tottenham,hotspurs,spurs,yids
-Manchester United,man united,man u,red devils
+arsenal,gunners
+tottenham hotspur,hotspurs,spurs,yids
+manchester united,man united,man u,red devils
 
 # Arena synonyms
 White Hart Lane,the lane

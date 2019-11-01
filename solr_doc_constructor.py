@@ -32,9 +32,11 @@ def solr(game):
     # Not kept
     #d,m,y = game['date'].split('/')
     #result['date'] = '{}-{}-{}'.format(y,m,d)
+    result['date'] = game['date']
     result['home'] = game['home_team']['name']
     result['away'] = game['away_team']['name']
     result['arena'] = game['arena']
+    result['attendance'] = game['attendance']
     result['home_lineup'] = list(map(lambda p: p['name'], game['home_team']['lineup']))
     result['away_lineup'] = list(map(lambda p: p['name'], game['away_team']['lineup']))
     result['home_subs'] = list(map(lambda p: p['name'], game['home_team']['subs']))

@@ -24,7 +24,7 @@ Given local binaries and terminal session inside main folder (e.g., `solr-8.2.0`
 9) Range filters - (e.g., search for all Tottenham home games with at least 60000 people in attendance: `home:tottenham AND attendance:[60000 TO *]`)
 
 ### Stuff
-- If no fields specified in query, the search will default to the report field (there is no native support for all fields, must create a [copy field](https://lucene.apache.org/solr/guide/8_2/copying-fields.html) that captures all document text into one field, which envolves double the memory usage and double the indexing effort (pointless here)
+- There is the concept of a [copy field](https://lucene.apache.org/solr/guide/8_2/copying-fields.html) that captures all document text into one field, which could be useful in an IRL situation where users just search freely instead and expect to match on any doc field, but this envolves double the memory usage and extra indexing effort that does not seem worth here
 
 ### Questions
 Check Google Keep note.

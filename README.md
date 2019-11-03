@@ -21,7 +21,7 @@ Given local binaries and terminal session inside main folder (e.g., `solr-8.2.0`
 7) Proximity search - (e.g., search for all matches whose report mention "eriksen free kick" within 10 words of each other: `report:"eriksen free kick"~10` - note that Christian Eriksen is a famous and the usual free kick taker at Tottenham)
 7) Fuzziness (typos/edit distance) (e.g., search for all Tottenham's home games, misspelling its name: `home:tottnam~2` - 2 represents max edit distance, which can vary between 0 and 2 in standard query parser)
 8) Custom ranking - *To be added/Haven't checked how to do yet*
-9) Range filters - *To be added/Haven't checked how to do yet*
+9) Range filters - (e.g., search for all Tottenham home games with at least 60000 people in attendance: `home:tottenham AND attendance:[60000 TO *]`)
 
 ### Stuff
 - If no fields specified in query, the search will default to the report field (there is no native support for all fields, must create a [copy field](https://lucene.apache.org/solr/guide/8_2/copying-fields.html) that captures all document text into one field, which envolves double the memory usage and double the indexing effort (pointless here)

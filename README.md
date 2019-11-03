@@ -18,7 +18,7 @@ Given local binaries and terminal session inside main folder (e.g., `solr-8.2.0`
 4) Boosts (some fields more relevant than others) - *To be added*
 5) Boolean queries (e.g., search for all matches between Arsenal and Chelsea (10 results, 2 games per season): `(home:arsenal AND away:chelsea) OR (home:chelsea AND away:arsenal)`)
 6) Faceting (group by) - (e.g., simple example number of matches grouped by date: leave default query `*:*`, set `facet` on, `facet.field` to date and `rows` to 0 for clearer output of facets)
-7) Proximity search - *To be added*
+7) Proximity search - (e.g., search for all matches whose report mention "eriksen free kick" within 10 words of each other: `report:"eriksen free kick"~10` - note that Christian Eriksen is a famous and the usual free kick taker at Tottenham)
 7) Fuzziness (typos/edit distance) (e.g., search for all Tottenham's home games, misspelling its name: `home:tottnam~2` - 2 represents max edit distance, which can vary between 0 and 2 in standard query parser)
 8) Custom ranking - *To be added/Haven't checked how to do yet*
 9) Range filters - *To be added/Haven't checked how to do yet*

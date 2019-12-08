@@ -69,9 +69,9 @@ report_length_df = pd.DataFrame([{'season': k, 'report_lengths': v} for k,v in r
 #print(report_length_df)
 
 # Graph 1
-final_df = final_df.set_index('minute')
-final_df = final_df.sort_index()
-final_df = final_df.transpose()
+# final_df = final_df.set_index('minute')
+# final_df = final_df.sort_index()
+# final_df = final_df.transpose()
 # final_df.T.plot()
 # plt.xlabel('Minutes')
 # plt.ylabel('Events')
@@ -104,8 +104,8 @@ for idx, key in enumerate(['14-15', '15-16', '16-17', '17-18', '18-19']):
     # goals_by_month_season[key] = (season_df_grouped['HomeFTScore'].sum()+season_df_grouped['AwayFTScore'].sum())/season_df_grouped['HomeFTScore'].count()
 
 # Graph 2
-goalsBySeason = pd.DataFrame(goals_by_season)
-goalsBySeason = goalsBySeason.set_index('season')
+# goalsBySeason = pd.DataFrame(goals_by_season)
+# goalsBySeason = goalsBySeason.set_index('season')
 # goalsBySeason.plot.bar(legend=None)
 # for i, v in enumerate(goalsBySeason.get('nr_goals')):
 #     plt.text(i - 0.15, v + 5, str(v))
@@ -115,10 +115,10 @@ goalsBySeason = goalsBySeason.set_index('season')
 
 
 # Graph 3
-goalsByMonthSeason = pd.DataFrame(goals_by_month_season)
-goalsByMonthSeason = goalsByMonthSeason.transpose()
-goalsByMonthSeason = goalsByMonthSeason[['08','09','10','11','12','01','02','03','04','05']]
-goalsByMonthSeason = goalsByMonthSeason.rename(columns=lambda x: calendar.month_abbr[int(x)])
+# goalsByMonthSeason = pd.DataFrame(goals_by_month_season)
+# goalsByMonthSeason = goalsByMonthSeason.transpose()
+# goalsByMonthSeason = goalsByMonthSeason[['08','09','10','11','12','01','02','03','04','05']]
+# goalsByMonthSeason = goalsByMonthSeason.rename(columns=lambda x: calendar.month_abbr[int(x)])
 
 # ax = goalsByMonthSeason.plot.barh(stacked=True, legend='reverse')
 # handles, labels = ax.get_legend_handles_labels()
@@ -134,32 +134,32 @@ goalsByMonthSeason = goalsByMonthSeason.rename(columns=lambda x: calendar.month_
 # plt.ylabel("Goals")
 # plt.xlabel("Month")
 
-#Graph 5
-print(winning_team_goals_df)
-winning_team_goals_df = winning_team_goals_df.set_index('nr_goals')
-winning_team_goals_df = winning_team_goals_df.sort_index()
-ax = winning_team_goals_df.plot.bar(legend=False, color="navy")
-plt.xticks(rotation=0)
-plt.title("????????")
-plt.ylabel("Games")
-plt.xlabel("Goals")
+# #Graph 5
+# print(winning_team_goals_df)
+# winning_team_goals_df = winning_team_goals_df.set_index('nr_goals')
+# winning_team_goals_df = winning_team_goals_df.sort_index()
+# ax = winning_team_goals_df.plot.bar(legend=False, color="navy")
+# plt.xticks(rotation=0)
+# plt.title("Number of goals by winning team")
+# plt.ylabel("Game count")
+# plt.xlabel("Goal count")
 
 #Graph 6 
 report_df = report_length_df.explode('report_lengths')
-# ax = sns.boxplot(x="season", y="report_lengths", data=report_df)
+ax = sns.boxplot(x="season", y="report_lengths", data=report_df)
 
-# # iterate over boxes
-# for i,box in enumerate(ax.artists):
-#     box.set_edgecolor('black')
-#     box.set_facecolor('white')
+# iterate over boxes
+for i,box in enumerate(ax.artists):
+    box.set_edgecolor('black')
+    box.set_facecolor('white')
 
-#     # iterate over whiskers and median lines
-#     for j in range(6*i,6*(i+1)):
-#          ax.lines[j].set_color('black')
+    # iterate over whiskers and median lines
+    for j in range(6*i,6*(i+1)):
+         ax.lines[j].set_color('black')
 
-# plt.title("Reports Length By Season")
-# plt.ylabel("Reports Length (No. Characters)")
-# plt.xlabel("Season")
+plt.title("Report Length Distribution")
+plt.ylabel("Report length (characters)")
+plt.xlabel("Season")
 
 # Show Graphs
 plt.show()

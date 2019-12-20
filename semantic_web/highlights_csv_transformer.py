@@ -5,7 +5,7 @@ games = json.load(open('games.json'))
 
 translation = {
     'goals': 'Goal',
-    'own_goals': 'Own_Ooal',
+    'own_goals': 'Own_Goal',
     'sub_off': 'Substitution_Off',
     'sub_on': 'Substitution_On',
     'yellows': 'Yellow_Card',

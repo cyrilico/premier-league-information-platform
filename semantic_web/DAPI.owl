@@ -1,0 +1,491 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns="http://www.semanticweb.org/cyrilico/ontologies/2019/11/untitled-ontology-25/"
+     xml:base="http://www.semanticweb.org/cyrilico/ontologies/2019/11/untitled-ontology-25/"
+     xmlns:dbo="http://dbpedia.org/ontology"
+     xmlns:dbp="http://dbpedia.org/property"
+     xmlns:owl="http://www.w3.org/2002/07/owl#"
+     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:xml="http://www.w3.org/XML/1998/namespace"
+     xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+     xmlns:foaf="http://xmlns.com/foaf/0.1/"
+     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    <owl:Ontology rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Datatypes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://www.w3.org/2001/XMLSchema#date -->
+
+    <rdfs:Datatype rdf:about="http://www.w3.org/2001/XMLSchema#date"/>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Object Properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://dbpedia.org/property/referee -->
+
+    <owl:ObjectProperty rdf:about="http://dbpedia.org/property/referee">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/refereedGames"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/Referee"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://dbpedia.org/property/stadium -->
+
+    <owl:ObjectProperty rdf:about="http://dbpedia.org/property/stadium">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/stadiumGames"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/Stadium"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/appearances -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/appearances">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/player"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/SoccerPlayer"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/Appearance"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/awayGames -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/awayGames">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/awayTeam"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/SoccerClub"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/awayTeam -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/awayTeam">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/SoccerClub"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/exhibition -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/exhibition">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/match"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/Appearance"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/highlight -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/highlight">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/highlightAppearance"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/Appearance"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/highlightAppearance -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/highlightAppearance">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/Appearance"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/homeGames -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/homeGames">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/homeTeam"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/SoccerClub"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/homeTeam -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/homeTeam">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/SoccerClub"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/match -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/match">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/Appearance"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/matchReport -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/matchReport">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/MatchReport"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/player -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/player">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/Appearance"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/SoccerPlayer"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/refereedGames -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/refereedGames">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/Referee"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/season -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/season">
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/seasonGames"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/SoccerLeagueSeason"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/seasonGames -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/seasonGames">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/SoccerLeagueSeason"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/stadiumGames -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/stadiumGames">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/Stadium"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/FootballMatch"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/team -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/team">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topObjectProperty"/>
+        <owl:inverseOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/teamAppearances"/>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/Appearance"/>
+        <rdfs:range rdf:resource="http://dbpedia.org/ontology/SoccerClub"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/teamAppearances -->
+
+    <owl:ObjectProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/teamAppearances">
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#InverseFunctionalProperty"/>
+        <rdfs:domain rdf:resource="http://dbpedia.org/ontology/SoccerClub"/>
+        <rdfs:range rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/Appearance"/>
+    </owl:ObjectProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Data properties
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://dbpedia.org/property/attendance -->
+
+    <owl:DatatypeProperty rdf:about="http://dbpedia.org/property/attendance">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#integer"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://dbpedia.org/property/date -->
+
+    <owl:DatatypeProperty rdf:about="http://dbpedia.org/property/date">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#date"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/awayftscore -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/awayftscore">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/awayhtscore -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/awayhtscore">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/content -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/content">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/endingYear -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/endingYear">
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2002/07/owl#topDataProperty"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#positiveInteger"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/homeftscore -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/homeftscore">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/homehtscore -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/homehtscore">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#nonNegativeInteger"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/minute -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/minute">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#positiveInteger"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/title -->
+
+    <owl:DatatypeProperty rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/title">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- http://xmlns.com/foaf/0.1/name -->
+
+    <owl:DatatypeProperty rdf:about="http://xmlns.com/foaf/0.1/name">
+        <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    </owl:DatatypeProperty>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // Classes
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    
+
+
+    <!-- http://dbpedia.org/ontology/FootballMatch -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/FootballMatch"/>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Referee -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Referee"/>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SoccerClub -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SoccerClub"/>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SoccerLeagueSeason -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SoccerLeagueSeason"/>
+    
+
+
+    <!-- http://dbpedia.org/ontology/SoccerPlayer -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/SoccerPlayer"/>
+    
+
+
+    <!-- http://dbpedia.org/ontology/Stadium -->
+
+    <owl:Class rdf:about="http://dbpedia.org/ontology/Stadium"/>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/Appearance -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Appearance"/>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/Goal -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Goal">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight"/>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/MatchReport -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/MatchReport"/>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/MissedPenalty -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/MissedPenalty">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/Own_Goal -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Own_Goal">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/Red_Card -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Red_Card">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/Substitution_Off -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Substitution_Off">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/Substitution_On -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Substitution_On">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight"/>
+    </owl:Class>
+    
+
+
+    <!-- http://www.semanticweb.org/DAPI/ontologies/Football/Yellow_Card -->
+
+    <owl:Class rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Yellow_Card">
+        <rdfs:subClassOf rdf:resource="http://www.semanticweb.org/DAPI/ontologies/Football/MatchHighlight"/>
+    </owl:Class>
+    
+
+
+    <!-- 
+    ///////////////////////////////////////////////////////////////////////////////////////
+    //
+    // General axioms
+    //
+    ///////////////////////////////////////////////////////////////////////////////////////
+     -->
+
+    <rdf:Description>
+        <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#AllDisjointClasses"/>
+        <owl:members rdf:parseType="Collection">
+            <rdf:Description rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Goal"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/MissedPenalty"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Own_Goal"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Red_Card"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Substitution_Off"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Substitution_On"/>
+            <rdf:Description rdf:about="http://www.semanticweb.org/DAPI/ontologies/Football/Yellow_Card"/>
+        </owl:members>
+    </rdf:Description>
+</rdf:RDF>
+
+
+
+<!-- Generated by the OWL API (version 4.5.9.2019-02-01T07:24:44Z) https://github.com/owlcs/owlapi -->
+

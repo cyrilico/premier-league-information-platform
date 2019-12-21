@@ -13,12 +13,14 @@ translation = {
     'missed_pens': 'Missed_Penalty'
 }
 
-GAME_COUNT = 1
+GAME_COUNT = 380
 
 with open('exhibitions.csv', 'w') as csvfile:
     writer = csv.writer(csvfile, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
     writer.writerow(['Player', 'Home', 'Away', 'Date', 'Team', 'Type', 'Minute'])
     for game in games[:GAME_COUNT]:
+        d,m,y = game['date'].split('/')
+        game['date'] = '{}-{}-{}'.format(y,m,d)
         for team in ['home_team', 'away_team']:
             for squad in ['lineup', 'subs']:
                 for player in game[team][squad]:
